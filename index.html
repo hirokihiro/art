@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>人ルーレット & 曲ルーレット（別々＋同時回転＋追加入力）</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <h1>人ルーレット & 曲ルーレット</h1>
+
+    <section class="grid">
+      <!-- 人ルーレット -->
+      <div class="card" id="people-card">
+        <h2>👤 人ルーレット</h2>
+
+        <div class="field">
+          <div class="field-header">
+            <span class="badge name">名前</span>
+            <span id="people-count" class="count">0件</span>
+          </div>
+          <label for="people-input" class="sr-only">名前（1行につき1人）</label>
+          <textarea id="people-input" rows="8" spellcheck="false"
+            placeholder="例：&#10;田中太郎&#10;鈴木花子&#10;はるか&#10;りく"></textarea>
+          <p class="hint">1行＝1人。空行は無視されます。</p>
+
+          <!-- 追加入力 -->
+          <div class="add-row">
+            <input id="people-add" type="text" inputmode="text" placeholder="追加する名前を入力（カンマ・改行で複数可）" aria-label="名前を追加">
+            <button id="people-add-btn" type="button">追加</button>
+            <button id="people-clear" class="ghost" type="button" aria-label="名前を全削除">全削除</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <button id="people-sample" type="button">サンプル読込</button>
+          <button id="people-shuffle" type="button">シャッフル</button>
+          <button id="people-apply" class="primary" type="button">ルーレット更新</button>
+        </div>
+
+        <div class="row">
+          <label class="check">
+            <input id="people-remove" type="checkbox" />
+            当たった名前を自動で除外
+          </label>
+        </div>
+
+        <div class="wheel-wrap">
+          <div class="pointer" aria-hidden="true"></div>
+          <canvas id="people-wheel" width="600" height="600" aria-label="人ルーレット"></canvas>
+          <div class="controls">
+            <button id="people-spin" class="spin-btn" type="button" aria-live="polite">人を回す！</button>
+            <div id="people-result" class="result" aria-atomic="true"></div>
+          </div>
+        </div>
+
+        <section class="history">
+          <h3>結果履歴</h3>
+          <ol id="people-history"></ol>
+        </section>
+      </div>
+
+      <!-- 曲ルーレット -->
+      <div class="card" id="songs-card">
+        <h2>🎵 曲ルーレット</h2>
+
+        <div class="field">
+          <div class="field-header">
+            <span class="badge song">曲名</span>
+            <span id="songs-count" class="count">0件</span>
+          </div>
+          <label for="songs-input" class="sr-only">曲名（1行につき1曲）</label>
+          <textarea id="songs-input" rows="8" spellcheck="false"
+            placeholder="例：&#10;Lemon (米津玄師)&#10;アイドル (YOASOBI)&#10;Pretender (Official髭男dism)"></textarea>
+          <p class="hint">1行＝1曲。アーティスト名は任意でOK。</p>
+
+          <!-- 追加入力 -->
+          <div class="add-row">
+            <input id="songs-add" type="text" inputmode="text" placeholder="追加する曲名を入力（カンマ・改行で複数可）" aria-label="曲名を追加">
+            <button id="songs-add-btn" type="button">追加</button>
+            <button id="songs-clear" class="ghost" type="button" aria-label="曲名を全削除">全削除</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <button id="songs-sample" type="button">サンプル読込</button>
+          <button id="songs-shuffle" type="button">シャッフル</button>
+          <button id="songs-apply" class="primary" type="button">ルーレット更新</button>
+        </div>
+
+        <div class="row">
+          <label class="check">
+            <input id="songs-remove" type="checkbox" />
+            当たった曲を自動で除外
+          </label>
+        </div>
+
+        <div class="wheel-wrap">
+          <div class="pointer" aria-hidden="true"></div>
+          <canvas id="songs-wheel" width="600" height="600" aria-label="曲ルーレット"></canvas>
+          <div class="controls">
+            <button id="songs-spin" class="spin-btn" type="button" aria-live="polite">曲を回す！</button>
+            <div id="songs-result" class="result" aria-atomic="true"></div>
+          </div>
+        </div>
+
+        <section class="history">
+          <h3>結果履歴</h3>
+          <ol id="songs-history"></ol>
+        </section>
+      </div>
+    </section>
+
+    <!-- 両方同時に回す -->
+    <div class="both-controls">
+      <button id="both-spin" class="spin-btn big" type="button">👥＋🎵 両方同時に回す！</button>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
