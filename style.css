@@ -7,6 +7,9 @@
   --accent-2:#51e3a6;
   --name:#6da6ff; /* 人の基調色(青系) */
   --song:#58e0a8; /* 曲の基調色(緑系) */
+
+  /* タップ領域の最小サイズ */
+  --tap: 44px;
 }
 
 *{box-sizing:border-box}
@@ -18,9 +21,10 @@ body{
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Meiryo", "Helvetica Neue", Arial, sans-serif;
 }
 
-.app{max-width:1200px; margin:32px auto; padding:0 16px 48px}
+.app{max-width:1200px; margin:32px auto; padding:0 16px 64px}
 h1{font-size: clamp(22px, 2.6vw, 32px); letter-spacing:.02em; margin:0 0 16px}
 
+/* レイアウト */
 .grid{
   display:grid;
   grid-template-columns: 1fr 1fr;
@@ -48,8 +52,9 @@ h1{font-size: clamp(22px, 2.6vw, 32px); letter-spacing:.02em; margin:0 0 16px}
 }
 .badge{
   display:inline-flex; align-items:center; gap:6px;
-  border-radius:999px; padding:4px 10px; font-size:13px; font-weight:700;
+  border-radius:999px; padding:6px 12px; font-size:13px; font-weight:700;
   background:#233154; color:#fff; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+  min-height: var(--tap);
 }
 .badge.name{background: color-mix(in oklab, var(--name) 35%, #233154)}
 .badge.song{background: color-mix(in oklab, var(--song) 35%, #233154)}
@@ -57,29 +62,32 @@ h1{font-size: clamp(22px, 2.6vw, 32px); letter-spacing:.02em; margin:0 0 16px}
 
 label{display:block; font-size:14px; color:var(--muted); margin-bottom:6px}
 textarea{
-  width:100%; resize:vertical; min-height:160px; border-radius:10px;
+  width:100%; resize:vertical; min-height:180px; border-radius:10px;
   border:1px solid rgba(255,255,255,.08); background:#0b1026; color:var(--fg);
-  padding:10px; line-height:1.6; outline:none; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2);
+  padding:12px; line-height:1.6; outline:none; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2);
 }
 .hint{margin:.5em 0 0; color:var(--muted); font-size:12px}
 
 /* 追加入力 */
 .add-row{
-  display:flex; gap:8px; align-items:center; margin-top:10px;
+  display:flex; gap:8px; align-items:center; margin-top:10px; flex-wrap: wrap;
 }
 .add-row input[type="text"]{
-  flex:1; min-width:0; padding:10px 12px; border-radius:10px;
+  flex:1 1 200px; min-width:0; padding:12px; border-radius:10px;
   border:1px solid rgba(255,255,255,.08); background:#0b1026; color:var(--fg);
-  outline:none; line-height:1.4;
+  outline:none; line-height:1.4; min-height: var(--tap);
 }
 .add-row input[type="text"]:focus{
   border-color:#3558d0; box-shadow: 0 0 0 2px rgba(122,162,255,.35);
 }
+
+/* ボタン */
 button{
-  appearance:none; border:none; border-radius:12px; padding:10px 14px;
-  background:#233154; color:var(--fg); font-weight:600; cursor:pointer;
+  appearance:none; border:none; border-radius:12px; padding:12px 14px;
+  background:#233154; color:var(--fg); font-weight:700; cursor:pointer;
   transition: transform .05s ease, background .2s ease, box-shadow .2s ease;
   box-shadow: 0 6px 18px rgba(0,0,0,.25);
+  min-height: var(--tap);
 }
 button:hover{background:#2a3b67}
 button:active{transform: translateY(1px)}
@@ -89,12 +97,16 @@ button.ghost{
   background: transparent; border:1px solid rgba(255,255,255,.18);
 }
 
-.row{display:flex; gap:10px; margin-top:12px; align-items:center}
-.check{display:flex; gap:8px; align-items:center; color:var(--muted); font-size:14px}
+.row{display:flex; gap:10px; margin-top:12px; align-items:center; flex-wrap: wrap}
+.row > button{flex:1 1 140px}
 
+.check{display:flex; gap:8px; align-items:center; color:var(--muted); font-size:14px}
+.check input{inline-size: 18px; block-size: 18px}
+
+/* ルーレット */
 .wheel-wrap{
   position:relative; background: linear-gradient(180deg, #121833, #0f1530);
-  border:1px solid rgba(255,255,255,.06); border-radius:16px; padding:18px 18px 72px;
+  border:1px solid rgba(255,255,255,.06); border-radius:16px; padding:18px 18px 84px;
   margin-top:12px;
   box-shadow: 0 12px 30px rgba(0,0,0,.35);
 }
@@ -104,13 +116,13 @@ button.ghost{
   filter: drop-shadow(0 6px 10px rgba(0,0,0,.4)); z-index:2;
 }
 .controls{position:absolute; left:0; right:0; bottom:12px; display:flex; flex-direction:column; align-items:center; gap:8px}
-.spin-btn{font-size: clamp(16px, 2vw, 18px); padding:12px 18px; background: radial-gradient(120% 140% at 10% 10%, var(--accent) 0%, #4369ff 60%, #2a49b6 100%); box-shadow: 0 10px 30px rgba(80,120,255,.35), inset 0 0 0 1px rgba(255,255,255,.15)}
+.spin-btn{font-size: clamp(16px, 2vw, 18px); padding:12px 18px; background: radial-gradient(120% 140% at 10% 10%, var(--accent) 0%, #4369ff 60%, #2a49b6 100%); box-shadow: 0 10px 30px rgba(80,120,255,.35), inset 0 0 0 1px rgba(255,255,255,.15); width: min(420px, 92%)}
 .result{min-height:24px; font-weight:700; color:#fff; text-align:center; text-shadow: 0 2px 6px rgba(0,0,0,.5)}
 
 .history ol, .history ul{margin:0; padding:0}
 .history ol{list-style: none; counter-reset: num}
 .history li{
-  counter-increment: num; padding:8px 12px; margin:6px 0; background:#0c1229;
+  counter-increment: num; padding:10px 12px; margin:6px 0; background:#0c1229;
   border:1px solid rgba(255,255,255,.06); border-radius:10px; display:flex; gap:8px; align-items:center;
 }
 .history h3{margin: 14px 0 6px; font-size:14px; color:var(--muted)}
@@ -119,7 +131,7 @@ button.ghost{
 .sr-only{position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0}
 
 canvas.wheel{
-  display:block; width:100%; height:auto; max-width:480px; aspect-ratio:1/1;
+  display:block; width:100%; height:auto; max-width:520px; aspect-ratio:1 / 1;
   margin:8px auto 0; transform:rotate(0deg); will-change:transform;
 }
 
@@ -130,13 +142,106 @@ canvas.wheel{
   justify-content:center;
 }
 .spin-btn.big{
-  font-size:20px;
+  font-size: clamp(18px, 2.4vw, 20px);
   padding:16px 28px;
   background: radial-gradient(120% 140% at 10% 10%, #ff9a5a 0%, #ff6b6b 50%, #c23aff 100%);
   box-shadow: 0 10px 30px rgba(255,100,180,.4), inset 0 0 0 1px rgba(255,255,255,.2);
+  width: min(540px, 96%);
 }
 
+/* 結果表示エリア */
+.both-result {
+  margin: 32px auto 0 auto;
+  padding: 16px;
+  background: #fffbe6;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  font-size: 1.3em;
+  text-align: center;
+  max-width: 480px;
+  min-height: 2em;
+}
+@media (max-width: 600px) {
+  .both-result {
+    font-size: 1em;
+    padding: 12px;
+    max-width: 98vw;
+  }
+}
+
+/* モバイル最適化 */
 @media (max-width: 1000px){
   .grid{grid-template-columns: 1fr}
-  .wheel-wrap{padding-bottom:84px}
+  .wheel-wrap{padding-bottom:96px}
+}
+
+@media (max-width: 640px){
+  .app{padding-bottom: 88px}
+  textarea{min-height: 150px}
+  .pointer{border-left-width:12px; border-right-width:12px; border-bottom-width:20px}
+  .row > button{flex:1 1 46%}
+  .spin-btn{width: 96%}
+  .spin-btn.big{width: 96%}
+}
+
+/* スマホ対応: 画面幅600px以下でレイアウト調整 */
+@media (max-width: 600px) {
+  body {
+    font-size: 16px;
+    padding: 8px;
+  }
+  .app {
+    padding: 0;
+  }
+  .grid {
+    display: block;
+  }
+  .card {
+    width: 100%;
+    margin-bottom: 24px;
+    box-sizing: border-box;
+    padding: 8px;
+  }
+  .wheel-wrap {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: auto;
+  }
+  canvas {
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100vw;
+    max-height: 60vw;
+  }
+  .add-row input,
+  .add-row button {
+    font-size: 1em;
+  }
+  .row {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .spin-btn.big {
+    font-size: 1.2em;
+    padding: 12px 0;
+    width: 100%;
+  }
+}
+
+/* さらに小さい端末向け */
+@media (max-width: 400px) {
+  h1 {
+    font-size: 1.2em;
+  }
+  .card h2 {
+    font-size: 1em;
+  }
+  .wheel-wrap {
+    max-height: 50vw;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{scroll-behavior: auto}
+  canvas.wheel{transition: none}
 }

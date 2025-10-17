@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>人ルーレット & 曲ルーレット（別々＋同時回転＋追加入力）</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -21,13 +21,14 @@
             <span id="people-count" class="count">0件</span>
           </div>
           <label for="people-input" class="sr-only">名前（1行につき1人）</label>
-          <textarea id="people-input" rows="8" spellcheck="false"
+          <textarea id="people-input" rows="8" spellcheck="false" inputmode="text"
             placeholder="例：&#10;田中太郎&#10;鈴木花子&#10;はるか&#10;りく"></textarea>
           <p class="hint">1行＝1人。空行は無視されます。</p>
 
           <!-- 追加入力 -->
           <div class="add-row">
-            <input id="people-add" type="text" inputmode="text" placeholder="追加する名前を入力（カンマ・改行で複数可）" aria-label="名前を追加">
+            <input id="people-add" type="text" inputmode="text" autocomplete="off"
+              placeholder="追加する名前を入力（カンマ・改行で複数可）" aria-label="名前を追加">
             <button id="people-add-btn" type="button">追加</button>
             <button id="people-clear" class="ghost" type="button" aria-label="名前を全削除">全削除</button>
           </div>
@@ -71,13 +72,14 @@
             <span id="songs-count" class="count">0件</span>
           </div>
           <label for="songs-input" class="sr-only">曲名（1行につき1曲）</label>
-          <textarea id="songs-input" rows="8" spellcheck="false"
+          <textarea id="songs-input" rows="8" spellcheck="false" inputmode="text"
             placeholder="例：&#10;Lemon (米津玄師)&#10;アイドル (YOASOBI)&#10;Pretender (Official髭男dism)"></textarea>
           <p class="hint">1行＝1曲。アーティスト名は任意でOK。</p>
 
           <!-- 追加入力 -->
           <div class="add-row">
-            <input id="songs-add" type="text" inputmode="text" placeholder="追加する曲名を入力（カンマ・改行で複数可）" aria-label="曲名を追加">
+            <input id="songs-add" type="text" inputmode="text" autocomplete="off"
+              placeholder="追加する曲名を入力（カンマ・改行で複数可）" aria-label="曲名を追加">
             <button id="songs-add-btn" type="button">追加</button>
             <button id="songs-clear" class="ghost" type="button" aria-label="曲名を全削除">全削除</button>
           </div>
@@ -116,6 +118,8 @@
     <div class="both-controls">
       <button id="both-spin" class="spin-btn big" type="button">👥＋🎵 両方同時に回す！</button>
     </div>
+    <!-- ここに結果表示エリアを追加 -->
+    <div id="both-result" class="both-result" aria-live="polite"></div>
   </main>
 
   <script src="script.js"></script>

@@ -18,7 +18,7 @@
       this.resultEl = this.q(`#${this.kind}-result`);
       this.historyEl = this.q(`#${this.kind}-history`);
       this.canvas = this.q(`#${this.kind}-wheel`);
-      this.ctx = this.canvas.getContext("2d");
+      this.ctx = this.canvas.getContext("2d", { alpha: false });
 
       // 追加入力
       this.addInput = this.q(`#${this.kind}-add`);
@@ -32,6 +32,12 @@
       this.SPIN_MS = 4200;
       this.EASE = "cubic-bezier(.2,.8,.1,1)";
 
+      // ユーザーの動作設定に配慮（省モーション）
+      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        this.SPIN_MS = 1200;
+        this.EASE = "linear";
+      }
+
       // 初期化
       this.loadSample();
       this.bindEvents();
@@ -42,7 +48,7 @@
     q(sel){ return this.root.querySelector(sel); }
 
     bindEvents(){
-      this.textarea.addEventListener("input", () => this.updateCount());
+      this.textarea.addEventListener("input", () => this.updateCount(), { passive: true });
       this.applyBtn.addEventListener("click", () => {
         this.applyFromTextarea();
         this.announce("ルーレットを更新しました");
@@ -61,6 +67,10 @@
       this.spinBtn.addEventListener("click", () => this.spin());
       this.canvas.addEventListener("transitionend", (e) => this.onSpinEnd(e));
       window.addEventListener("resize", () => this.onResize());
+      window.addEventListener("orientationchange", () => {
+        // iOSでの回転時の一時的なズレを抑制
+        setTimeout(() => this.onResize(), 220);
+      });
 
       // 追加入力のイベント
       this.addBtn.addEventListener("click", () => this.addFromInput());
@@ -134,7 +144,8 @@
 
     resizeCanvasToDPR(){
       const wrap = this.canvas.parentElement;
-      const size = Math.min(480, wrap.clientWidth - 36);
+      // スマホでの余白・固定ボタンを考慮して安全マージンを少し増やす
+      const size = Math.min(520, Math.max(240, wrap.clientWidth - 28));
       const dpr = Math.max(1, window.devicePixelRatio || 1);
       this.canvas.classList.add("wheel");
       this.canvas.style.width = `${size}px`;
@@ -341,8 +352,15 @@
   });
 
   // 両方同時に回す
-  document.getElementById("both-spin").addEventListener("click", () => {
-    people.spin();
-    songs.spin();
+  document.getElementById('both-spin').addEventListener('click', async () => {
+    // 既存の人・曲ルーレットの回転処理を呼び出す
+    const peopleResult = await spinPeopleWheel(); // 人ルーレットの結果取得関数
+    const songsResult = await spinSongsWheel();   // 曲ルーレットの結果取得関数
+
+    // 結果を下部に表示
+    const bothResult = document.getElementById('both-result');
+    bothResult.innerHTML = `
+      <span>👤 <strong>${peopleResult}</strong> × 🎵 <strong>${songsResult}</strong></span>
+    `;
   });
 })();
