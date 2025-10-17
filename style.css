@@ -106,7 +106,7 @@ button.ghost{
 /* ルーレット */
 .wheel-wrap{
   position:relative; background: linear-gradient(180deg, #121833, #0f1530);
-  border:1px solid rgba(255,255,255,.06); border-radius:16px; padding:18px 18px 84px;
+  border:1px solid rgba(255,255,255,.06); border-radius:16px; padding:12px 0 84px 0;
   margin-top:12px;
   box-shadow: 0 12px 30px rgba(0,0,0,.35);
 }
@@ -151,21 +151,46 @@ canvas.wheel{
 
 /* 結果表示エリア */
 .both-result {
-  margin: 32px auto 0 auto;
+  margin: 56px auto 0 auto;   /* 上マージンを大きくする */
   padding: 16px;
-  background: #fffbe6;
+  background: #fff;           /* 背景を白に */
+  color: #222;                /* 文字色を濃く */
   border-radius: 8px;
+  border: 2px solid #ffd700;  /* 金色の枠線で目立たせる */
   box-shadow: 0 2px 8px rgba(0,0,0,0.07);
   font-size: 1.3em;
   text-align: center;
   max-width: 480px;
   min-height: 2em;
+  font-weight: bold;          /* 太字でさらに見やすく */
 }
 @media (max-width: 600px) {
   .both-result {
+    margin: 40vw auto 0 auto; /* スマホではcanvasの高さ分だけ下げる */
     font-size: 1em;
     padding: 12px;
     max-width: 98vw;
+  }
+  .wheel-wrap {
+    width: 100%;
+    max-width: 100vw;
+    padding: 8px 0 32px 0; /* 下paddingも少し減らす */
+    box-sizing: border-box;
+  }
+  canvas,
+  canvas.wheel {
+    display: block;
+    width: 70vw !important;      /* 画面幅の70%に縮小 */
+    height: 70vw !important;     /* 高さも幅と同じに */
+    aspect-ratio: 1 / 1;
+    max-width: 70vw;
+    max-height: 70vw;
+    min-width: 0;
+    min-height: 0;
+    margin: 8px auto 0;
+    background: transparent;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   }
 }
 
@@ -205,13 +230,23 @@ canvas.wheel{
   .wheel-wrap {
     width: 100%;
     max-width: 100vw;
-    overflow-x: auto;
+    padding: 8px 0 32px 0; /* 下paddingも少し減らす */
+    box-sizing: border-box;
   }
-  canvas {
-    width: 100% !important;
-    height: auto !important;
-    max-width: 100vw;
-    max-height: 60vw;
+  canvas,
+  canvas.wheel {
+    display: block;
+    width: 70vw !important;      /* 画面幅の70%に縮小 */
+    height: 70vw !important;     /* 高さも幅と同じに */
+    aspect-ratio: 1 / 1;
+    max-width: 70vw;
+    max-height: 70vw;
+    min-width: 0;
+    min-height: 0;
+    margin: 8px auto 0;
+    background: transparent;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   }
   .add-row input,
   .add-row button {

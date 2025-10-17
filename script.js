@@ -351,11 +351,46 @@
     ]
   });
 
+  // ルーレットを回して結果をPromiseで返す関数
+  function spinRoulette(roulette) {
+    return new Promise(resolve => {
+      // すでに回転中なら何もしない
+      if (roulette.isSpinning) return;
+
+      // spin()を呼び出し
+      roulette.spin();
+
+      // 一度だけ実行するためのフラグ
+      let handled = false;
+
+      function handler(e) {
+        if (handled) return;
+        if (e.propertyName !== "transform") return;
+        // まだ回転中なら終了を待つ
+        if (roulette.isSpinning) return;
+        handled = true;
+        roulette.canvas.removeEventListener("transitionend", handler);
+
+        // 結果を取得
+        const N = roulette.items.length;
+        const deg = ((roulette.currentRotation % 360) + 360) % 360;
+        const segDeg = 360 / N;
+        const index = ((Math.floor(N - (deg / segDeg)) % N) + N) % N;
+        const picked = roulette.items[index];
+
+        resolve(picked);
+      }
+      roulette.canvas.addEventListener("transitionend", handler);
+    });
+  }
+
   // 両方同時に回す
   document.getElementById('both-spin').addEventListener('click', async () => {
-    // 既存の人・曲ルーレットの回転処理を呼び出す
-    const peopleResult = await spinPeopleWheel(); // 人ルーレットの結果取得関数
-    const songsResult = await spinSongsWheel();   // 曲ルーレットの結果取得関数
+    // 両方同時に回す
+    const [peopleResult, songsResult] = await Promise.all([
+      spinRoulette(people),
+      spinRoulette(songs)
+    ]);
 
     // 結果を下部に表示
     const bothResult = document.getElementById('both-result');
